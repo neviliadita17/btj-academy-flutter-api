@@ -6,9 +6,11 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Get.find<HomeController>();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Data Mahasiswa'),
@@ -107,13 +109,13 @@ class HomeView extends GetView<HomeController> {
                               },
                               child: Text('Cancel'),
                             ),
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     controller.addData();
-                            //     Get.back(); // Tutup dialog
-                            //   },
-                            //   child: Text('Add'),
-                            // ),
+                            ElevatedButton(
+                              onPressed: () {
+                                controller.addData();
+                                Get.back(); // Tutup dialog
+                              },
+                              child: Text('Add'),
+                            ),
                           ],
                         ),
                       ],
@@ -125,47 +127,40 @@ class HomeView extends GetView<HomeController> {
           },
           child: Icon(Icons.add),
         ),
+
         body: Obx(() => Container(
-          margin: EdgeInsets.all(16),
-          child: ListView.builder(
-            itemCount: controller.data.length,
-            itemBuilder: (context,index){
-              return Container(
+        margin: EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: controller.data.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                // Navigate to DetailView when a list item is clicked
+                Get.toNamed('/detail/${controller.data[index].nama}');
+              },
+              child: Container(
                 margin: EdgeInsets.only(bottom: 8),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent.withOpacity(.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
-                  title: Text(controller.data[index].nama??"-"),
+                  title: Text(controller.data[index].nama ?? "-"),
                   subtitle: Row(
                     children: [
-                      Text(controller.data[index].prodi??"-"),
+                      Text(controller.data[index].prodi ?? "-"),
                       Text(' - '),
-                      Text(controller.data[index].angkatan??"-"),
+                      Text(controller.data[index].angkatan ?? "-"),
                     ],
                   ),
                 ),
-                // child: Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Text(controller.data[index]['nama'], style: TextStyle(fontSize: 14),),
-                //     SizedBox(height: 4,),
-                //     Row(
-                //       children: [
-                //         Text(controller.data[index]['jurusan'], style: TextStyle(fontSize: 10),),
-                //         Text('-' , style: TextStyle(fontSize: 10),),
-                //         Text(controller.data[index]['angkatan'], style: TextStyle(fontSize: 10),),
-                //       ],
-                //     )
-                //   ],
-                // ),
-              );
-            },
-          ),
-        )
-        )
+              ),
+            );
+          },
+        ),
+      )),
+
     );
   }
 }
