@@ -1,6 +1,6 @@
 # project_api
 
-A new Flutter project.
+Flutter Project using GetCLI integration with API
 
 ## Getting Started
 
