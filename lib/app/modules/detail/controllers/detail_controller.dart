@@ -18,7 +18,6 @@ class DetailController extends GetxController {
 
   initData()async{
     print('Data Masuk');
-    // loading(true);
     data.clear();
     try {
       await _provider.getMahasiswa().then((value) async{
@@ -30,10 +29,8 @@ class DetailController extends GetxController {
         }).toList();
         print('cek data List');
         print(data[0].nama);
-        // loading(false);
       });
     } catch (e) {
-      // loading(false);
       print(e);
     }
   }
