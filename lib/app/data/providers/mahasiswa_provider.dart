@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+// import 'package:dio/dio.dart';
 
 import '../models/mahasiswa_model.dart';
 
@@ -14,19 +15,6 @@ class MahasiswaProvider extends GetConnect {
       await post(
           'https://btj-academy-default-rtdb.asia-southeast1.firebasedatabase.app/mahasiswa.json',
       mahasiswa.toJson());
-
-  Future<Response> deleteMahasiswa(int id) async =>
-      await delete('mahasiswa/$id');
-
-
-  Future<Response<dynamic>> getDetails(String? nama) async {
-    try {
-      final encodedNama = Uri.encodeComponent(nama ?? '');
-      return await get('https://btj-academy-default-rtdb.asia-southeast1.firebasedatabase.app/mahasiswa.json/$encodedNama.json');
-    } catch (e) {
-      throw 'Error: $e';
-    }
-  }
 }
 
 

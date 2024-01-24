@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
@@ -17,7 +16,8 @@ class HomeView extends GetView<HomeController> {
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Colors.indigoAccent,
+          foregroundColor: Colors.white,
           onPressed: (){
 
             Get.dialog(
@@ -35,7 +35,12 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Center(
-                          child: Text("Add Mahasiswa", style: TextStyle(fontSize: 14),),
+                          child: Text("Tambah Data Mahasiswa",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 16),
                         TextFormField(
@@ -43,7 +48,7 @@ class HomeView extends GetView<HomeController> {
                           controller: controller.nameController,
                           style: TextStyle(fontSize: 10),
                           decoration: InputDecoration(
-                              labelText: 'Name',
+                              labelText: 'Nama',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)
                               )
@@ -53,9 +58,9 @@ class HomeView extends GetView<HomeController> {
                         TextFormField(
                           expands: false,
                           controller: controller.nimController,
-                          style: TextStyle(fontSize: 10),
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                              labelText: 'Nim',
+                              labelText: 'NIM',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)
                               )
@@ -89,7 +94,7 @@ class HomeView extends GetView<HomeController> {
                         TextFormField(
                           expands: false,
                           controller: controller.ipkController,
-                          style: TextStyle(fontSize: 10),
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                               labelText: 'IPK',
                               border: OutlineInputBorder(
@@ -105,16 +110,25 @@ class HomeView extends GetView<HomeController> {
 
                             ElevatedButton(
                               onPressed: () {
+                                controller.resetData();
                                 Get.back();
                               },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade400),
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              ),
                               child: Text('Cancel'),
                             ),
                             ElevatedButton(
                               onPressed: () {
                                 controller.addData();
-                                Get.back(); // Tutup dialog
+                                Get.back();
                               },
-                              child: Text('Add'),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.indigoAccent),
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              ),
+                              child: Text('Tambah'),
                             ),
                           ],
                         ),
@@ -133,16 +147,22 @@ class HomeView extends GetView<HomeController> {
         child: ListView.builder(
           itemCount: controller.data.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // Navigate to DetailView when a list item is clicked
-                Get.toNamed('/detail/${controller.data[index].nama}');
+            return InkWell(
+              onTap: (){
+                Get.toNamed('/detail', arguments:{
+                  'index': index,
+                  'nama' : controller.data[index].nama??'-',
+                  'prodi' : controller.data[index].prodi??'-',
+                  'angkatan' : controller.data[index].angkatan??'-',
+                  'nim' : controller.data[index].nim??'-',
+                  'ipk' : controller.data[index].ipk??'-',
+                });
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 8),
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent.withOpacity(.1),
+                  color: Colors.blueAccent.withOpacity(.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
@@ -160,7 +180,6 @@ class HomeView extends GetView<HomeController> {
           },
         ),
       )),
-
     );
   }
 }

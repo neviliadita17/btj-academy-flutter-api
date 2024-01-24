@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-// import 'package:get/get_rx/get_rx.dart';
-// import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 import 'package:project_api/app/data/models/mahasiswa_model.dart';
 import 'package:project_api/app/data/providers/mahasiswa_provider.dart';
-
-// import 'package:project_api/app/modules/home/datamahasiswa_model.dart';
-// import 'package:project_api/app/modules/home/providers/datamahasiswa_provider.dart';
 
 class HomeController extends GetxController {
   MahasiswaProvider mahasiswaProvider = Get.find<MahasiswaProvider>();
@@ -16,11 +12,7 @@ class HomeController extends GetxController {
   TextEditingController ipkController = TextEditingController();
   TextEditingController angkatanController = TextEditingController();
 
-  // DatamahasiswaProvider datamahasiswaProvider  = Get.find<DatamahasiswaProvider>();
-
   RxList<Mahasiswa> data = <Mahasiswa>[].obs;
-  // RxList<Datamahasiswa> data = <Datamahasiswa>[].obs;
-
   RxBool loading = false.obs;
 
   initData() async {
@@ -50,15 +42,25 @@ class HomeController extends GetxController {
     }
   }
 
-  addData()async{
-    try{
+  addData() async {
+    try {
+      // Validasi form tidak boleh kosong
+      if (nameController.text.isEmpty ||
+          nimController.text.isEmpty ||
+          prodiController.text.isEmpty ||
+          ipkController.text.isEmpty ||
+          angkatanController.text.isEmpty) {
+        Get.snackbar('Error', 'Semua form harus diisi');
+        return;
+      }
+
       await mahasiswaProvider.postMahasiswa(Mahasiswa(
         ipk: ipkController.text,
         nama: nameController.text,
         nim: nimController.text,
         prodi: prodiController.text,
         angkatan: angkatanController.text,
-      )).then((value){
+      )).then((value) {
         print('cek post mahasiswa');
         print(value.body);
         initData();
@@ -69,7 +71,7 @@ class HomeController extends GetxController {
         prodiController.clear();
         angkatanController.clear();
       });
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -83,6 +85,14 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+  }
+  @override
+  void resetData() {
+    nameController.clear();
+    nimController.clear();
+    prodiController.clear();
+    ipkController.clear();
+    angkatanController.clear();
   }
 
   @override

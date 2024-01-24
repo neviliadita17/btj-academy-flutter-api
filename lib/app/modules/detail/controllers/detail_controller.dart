@@ -1,77 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
 import 'package:project_api/app/data/models/mahasiswa_model.dart';
 import 'package:project_api/app/data/providers/mahasiswa_provider.dart';
 
-// class DetailController extends GetxController {
-//   MahasiswaProvider mahasiswaProvider = Get.find<MahasiswaProvider>();
-//
-//   Rx<Mahasiswa?> selectedMahasiswa = Rx<Mahasiswa?>(null);
-//   RxBool loading = false.obs;
-//
-//   fetchDetails(String? nama) async {
-//     loading(true);
-//     try {
-//       await mahasiswaProvider.getDetails(nama).then((value) {
-//         // Assuming getDetails returns Mahasiswa details based on the name
-//         selectedMahasiswa.value = Mahasiswa(
-//           angkatan: value['angkatan'],
-//           ipk: value['ipk'],
-//           nama: value['nama'],
-//           nim: value['nim'],
-//           prodi: value['prodi'],
-//         );
-//         loading(false);
-//       });
-//     } catch (e) {
-//       loading(false);
-//       print(e);
-//     }
-//   }
-//
-//   @override
-//   void onInit() {
-//     super.onInit();
-//   }
-//
-//   @override
-//   void onReady() {
-//     super.onReady();
-//   }
-//
-//   @override
-//   void onClose() {
-//     super.onClose();
-//   }
-// }
-
 class DetailController extends GetxController {
-  final MahasiswaProvider mahasiswaProvider = Get.find();
-  RxBool loading = false.obs;
-  Rx<Mahasiswa?> selectedMahasiswa = Rx<Mahasiswa?>(null);
+  //TODO: Implement DetailController
 
-  void fetchDetails(String? nama) async {
-    loading(true);
+  MahasiswaProvider _provider = Get.find<MahasiswaProvider>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController prodiController = TextEditingController();
+  TextEditingController angkatanController = TextEditingController();
+  TextEditingController nimController = TextEditingController();
+  TextEditingController ipkController = TextEditingController();
+  RxList<Mahasiswa> data = <Mahasiswa>[].obs;
+  RxBool loading = false.obs;
+
+  initData()async{
+    print('Data Masuk');
+    // loading(true);
+    data.clear();
     try {
-      final Response response = await mahasiswaProvider.getDetails(nama);
-      print(response.body);  // Tambahkan baris ini untuk mencetak respons API
-      if (response.statusCode == 200) {
-        // Menyesuaikan akses ke data sesuai dengan struktur respons dari API
-        selectedMahasiswa.value = Mahasiswa.fromJson(response.body ?? {});
-      } else {
-        throw 'Failed to fetch details';
-      }
+      await _provider.getMahasiswa().then((value) async{
+        print("cek data dari API");
+        await value.body.entries.map((element) {
+          var temp = Mahasiswa.fromJson(element.value);
+          print(element.value);
+          data.add(temp);
+        }).toList();
+        print('cek data List');
+        print(data[0].nama);
+        // loading(false);
+      });
     } catch (e) {
-      print(e);  // Tambahkan baris ini untuk mencetak kesalahan
-      throw 'Error: $e';
-    } finally {
-      loading(false);
+      // loading(false);
+      print(e);
     }
   }
+
+  final count = 0.obs;
+
 
   @override
   void onInit() {
     super.onInit();
+
+    initData();
   }
 
   @override
@@ -83,4 +57,6 @@ class DetailController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  void increment() => count.value++;
 }
