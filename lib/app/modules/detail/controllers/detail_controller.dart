@@ -7,7 +7,7 @@ import 'package:project_api/app/data/providers/mahasiswa_provider.dart';
 class DetailController extends GetxController {
   //TODO: Implement DetailController
 
-  MahasiswaProvider _provider = Get.find<MahasiswaProvider>();
+  MahasiswaProvider mahasiswaProvider = Get.find<MahasiswaProvider>();
   TextEditingController nameController = TextEditingController();
   TextEditingController prodiController = TextEditingController();
   TextEditingController angkatanController = TextEditingController();
@@ -20,7 +20,7 @@ class DetailController extends GetxController {
     print('Data Masuk');
     data.clear();
     try {
-      await _provider.getMahasiswa().then((value) async{
+      await mahasiswaProvider.getMahasiswa().then((value) async{
         print("cek data dari API");
         await value.body.entries.map((element) {
           var temp = Mahasiswa.fromJson(element.value);
